@@ -1,4 +1,4 @@
-class NATEntry
+class NAT
   attr_accessor :inside, :outside
 
   def initialize(inside, outside)
