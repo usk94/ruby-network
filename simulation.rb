@@ -2,8 +2,12 @@ require_relative 'device'
 require_relative 'access_list'
 require_relative 'nat'
 require_relative 'dns'
-require_relative 'allow_access'
+require_relative 'vlan'
 require 'net/ping'
+
+# vlanの作成
+vlan_admin = VLAN.new(10, "Admin", "10.10.10.0/24")
+vlan_employee = VLAN.new(20, "Employee", "10.10.20.0/24")
 
 # デバイスの作成
 db_server = Device.new("db_server", vlan_admin)
@@ -27,11 +31,13 @@ else
 end
 
 # NATの変換
+nat_config = NAT.new("10.10.20.10", "203.0.113.10")
 external_ip = nat_config.translate(employee_device.ip_address)
 puts "Translated IP for internet access: #{external_ip}"
 
 # DNSの解決
 dns_server = DNSServer.new
-dns_server.add_record(dns_db_server)
+dns_record = DNSRecord.new("db.companyA.local", "10.10.10.2")
+dns_server.add_record(dns_record)
 resolved_ip = dns_server.resolve("db.companyA.local")
 puts "Resolved IP for db.companyA.local: #{resolved_ip}"
