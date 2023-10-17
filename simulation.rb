@@ -17,9 +17,9 @@ http_server = Device.new("10.10.10.2", vlan_admin)
 
 # AccessListEntryの作成
 access_list = AccessList.new
-access_list.add_entry("deny", "10.10.40.0/24", "10.10.10.2/32")  # マーケティング部門からHTTPサーバーへのアクセスをブロック
 access_list.add_entry("permit", "10.10.20.0/24", "10.10.10.0/24")
 access_list.add_entry("permit", "10.10.40.0/24", "10.10.10.0/24")
+access_list.add_entry("deny", "10.10.40.0/24", "10.10.10.2/32") # マーケティング部門からHTTPサーバーへのアクセスをブロック
 
 # VLAN20からVLAN10へのアクセスは成功することを確認
 access_list.report_access_result(employee_device.ip_address, db_server.ip_address)

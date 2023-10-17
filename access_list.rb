@@ -8,12 +8,11 @@ class AccessList
   end
 
   def access_allowed?(source_ip, dest_ip)
-    @entries.each do |entry|
-      if entry.matches_traffic?(source_ip, dest_ip)
-        return entry.action == "permit"
-      end
+    if @entries.any? { |entry| entry.action == "deny" && entry.matches_traffic?(source_ip, dest_ip) }
+      return false
     end
-    false
+
+    @entries.any? { |entry| entry.action == "permit" && entry.matches_traffic?(source_ip, dest_ip) }
   end
 
   def report_access_result(source_ip, dest_ip)
